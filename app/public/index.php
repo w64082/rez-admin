@@ -31,7 +31,7 @@ $sett
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rez API Widget</title>
+    <title>Rez API Admin</title>
 
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -60,7 +60,14 @@ $sett
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="/">Rez API Widget</a>
+            <a class="brand" href="/">Rez API Admin</a>
+            <div class="nav-collapse">
+                <ul class="nav">
+                    <li><a href="#">Visits</a></li>
+                    <li><a href="#about">Workers</a></li>
+                    <li><a href="#contact">Places</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
         </div>
     </div>
 </div>
@@ -154,7 +161,7 @@ $sett
     <hr>
 
     <footer>
-        <p>Rez API - Rez Widget</p>
+        <p>Rez API - Rez Admin <a class="btn btn-small btn-danger pull-right">Logout</a></p>
     </footer>
 
 </div> <!-- /container -->
