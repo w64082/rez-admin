@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  app:
+    build:
+      dockerfile: docker/php/Dockerfile
+      context: .
+    container_name: rez-admin-app
+    ports:
+      - "9595:80"
+    volumes:
+      - ./app/:/var/www/
