@@ -128,11 +128,13 @@ class Connect
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_URL,self::API_HOST . $this->getQueryPath());
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
 
         if($this->getQueryMethod() == 'POST') {
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($this->getQueryFormParams()));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        } elseif ($this->getQueryMethod() == 'DELETE') {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
         }
 
         $resultBody = curl_exec($ch);
