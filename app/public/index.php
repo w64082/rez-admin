@@ -94,8 +94,16 @@ require_once '../Settings.php';
 
     <hr>
 
+    <?php
+    $logoutLink = '';
+    if($_SESSION['logged']) {
+        $logoutLink = '<a class="btn btn-small btn-danger pull-right" href="/?logout=1">Logout</a>';
+    }
+
+    ?>
+
     <footer>
-        <p>Rez API - Rez Admin <a class="btn btn-small btn-danger pull-right" href="/?logout=1">Logout</a></p>
+        <p>Rez API - Rez Admin <?= $logoutLink ?></p>
     </footer>
 
 </div> <!-- /container -->
