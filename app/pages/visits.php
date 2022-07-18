@@ -1,4 +1,5 @@
 <?php
+
 $conn = new Connect();
 
 $connAllPlacesRes = clone $conn;
@@ -8,6 +9,9 @@ $connAllPlacesRes
     ->process();
 
 $places = json_decode($connAllPlacesRes->getHttpResponseBody(), true);
+if(empty($places)) {
+    $places = [];
+}
 
 $connAllWorkersRes = clone $conn;
 $connAllWorkersRes
@@ -16,6 +20,9 @@ $connAllWorkersRes
     ->process();
 
 $workers = json_decode($connAllWorkersRes->getHttpResponseBody(), true);
+if(empty($workers)) {
+    $workers = [];
+}
 
 $sett = new Settings();
 $sett
@@ -37,39 +44,60 @@ $sett
 
 <?php if(!empty($_GET['delete_visit']))
 {
-    $connVisitsRes = clone $conn;
-    $connVisitsRes
+    $connVisitDelete = clone $conn;
+    $connVisitDelete
         ->setQueryMethod('DELETE')
         ->setQueryPath('visits/' . $_GET['delete_visit'])
         ->process();
 
-    if($connVisitsRes->isResponseCodeSuccess()) {
+    if($connVisitDelete->isResponseCodeSuccess()) {
         header("Location: /?action=visits&confirm=1");
         return;
     }
 }
 ?>
 
-    <?php if(!empty($_POST['reservation_name']) && !empty($_POST['reservation_surname']))
+    <?php if(!empty($_POST['new_visit_worker_id']) && !empty($_POST['new_visit_place_id']) && !empty($_POST['new_visit_date_from']) && !empty($_POST['new_visit_date_to']))
     {
-        $connVisitsRes = clone $conn;
-        $connVisitsRes
+        $connVisitAdd = clone $conn;
+        $connVisitAdd
             ->setQueryMethod('POST')
-            ->setQueryPath('visits/' .$_GET['id'].'/reservation')
-            ->setQueryFormParams(['client_name' => $_POST['reservation_name'], 'client_surname' => $_POST['reservation_surname']])
+            ->setQueryPath('visits')
+            ->setQueryFormParams([
+                    'id_worker' => $_POST['new_visit_worker_id'],
+                    'id_place' => $_POST['new_visit_place_id'],
+                    'date_start' => $_POST['new_visit_date_from'],
+                    'date_to' => $_POST['new_visit_date_to']
+                ])
             ->process();
 
-        if($connVisitsRes->isResponseCodeSuccess()) {
-            header("Location: /?confirm=1&id=$_GET[id]");
+        if($connVisitAdd->isResponseCodeSuccess()) {
+            header("Location: /?confirm=1");
             return;
         }
     }
     ?>
     <div class="row-fluid">
         <form class="well form-inline" method="post">
-            <input name="reservation_name" type="text" class="input-small" placeholder="Name">
-            <input name="reservation_surname" type="password" class="input-small" placeholder="Surname">
-            <button type="submit" class="btn">Confirm</button>
+            <label for="new_visit_worker_id">Worker: </label>
+            <select style="margin-right: 10px;margin-left: 10px;" id="new_visit_worker_id" name="new_visit_worker_id">
+                <?php
+                foreach($sett->getWorkersDetails() as $key => $worker) {
+                    echo '<option value="'.$key.'">'.$worker.'</option>';
+                }
+                ?>
+            </select>
+            <label for="new_visit_place_id">Place: </label>
+            <select style="margin-right: 10px;margin-left: 10px;" id="new_visit_place_id" name="new_visit_place_id">
+                <?php
+                foreach($sett->getPlacesDetails() as $key => $place) {
+                    echo '<option value="'.$key.'">'.$place.'</option>';
+                }
+                ?>
+            </select>
+            <input name="new_visit_date_from" type="text" class="input-medium" placeholder="Date from">
+            <input name="new_visit_date_to" type="text" class="input-medium" placeholder="Date to">
+            <button type="submit" class="btn">Add</button>
         </form>
     </div>
 
@@ -103,7 +131,11 @@ $sett
 
             $isReserved = $array['is_reserved'] ? '<span class="btn btn-danger">RESERVED</span>' : '<span class="btn btn-success">AVAILABLE</span>';
 
-            $deleteLink = '<a class="btn btn-danger" href="?action=visits&delete_visit='.$array['id'].'">DELETE</a>';
+            if(empty($array['client_name']['String'])) {
+                $deleteLink = '<a class="btn btn-danger" href="?action=visits&delete_visit='.$array['id'].'">DELETE</a>';
+            } else {
+                $deleteLink = '';
+            }
 
             echo '<tr>';
             echo '<td>'.$array['id'].'</td>';

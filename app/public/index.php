@@ -1,5 +1,18 @@
 <?php
+error_reporting(E_ERROR);
 ob_start();
+session_start();
+
+if($_GET['logout'] == 1) {
+    session_destroy();
+    header("Location: /?action=login");
+    return;
+}
+
+if(!$_SESSION['logged'] && $_GET['action'] != 'login') {
+    header("Location: /?action=login");
+}
+
 require_once '../Connect.php';
 require_once '../Settings.php';
 
@@ -55,7 +68,6 @@ require_once '../Settings.php';
     <?php
 
     $action = $_GET['action'];
-
     if(empty($action)) {
         $action = 'visits';
     }
@@ -83,7 +95,7 @@ require_once '../Settings.php';
     <hr>
 
     <footer>
-        <p>Rez API - Rez Admin <a class="btn btn-small btn-danger pull-right">Logout</a></p>
+        <p>Rez API - Rez Admin <a class="btn btn-small btn-danger pull-right" href="/?logout=1">Logout</a></p>
     </footer>
 
 </div> <!-- /container -->

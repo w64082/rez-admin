@@ -2,6 +2,8 @@
 
 class Settings
 {
+    public const ADMIN_PASS = 'admin';
+
     private array $workersDetails;
     private array $placesDetails;
 

@@ -1,4 +1,5 @@
 <?php
+
 $conn = new Connect();
 
 $connAllPlacesRes = clone $conn;
@@ -8,6 +9,9 @@ $connAllPlacesRes
     ->process();
 
 $places = json_decode($connAllPlacesRes->getHttpResponseBody(), true);
+if(empty($places)) {
+    $places = [];
+}
 
 $connAllWorkersRes = clone $conn;
 $connAllWorkersRes
@@ -16,6 +20,9 @@ $connAllWorkersRes
     ->process();
 
 $workers = json_decode($connAllWorkersRes->getHttpResponseBody(), true);
+if(empty($workers)) {
+    $workers = [];
+}
 
 $sett = new Settings();
 $sett
