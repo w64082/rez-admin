@@ -16,7 +16,7 @@ This software allows you to test connection to REST API and use:
 # Run API on host by Docker
 
 - visit: http://localhost:9595 (admin)
-- visist https://localhost/9595/worker/.php (worker area)
+- visist https://localhost/9595/worker.php (worker area)
 
 # TODO - improvements:
 
